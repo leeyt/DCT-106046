@@ -24,16 +24,29 @@ namespace EF6Course
                 //GetDepartments(db);
 
                 // Add
-                var course = new Course
+                //AddCourse(db);
+
+                // Update
+                var courses = db.Course.Where(c => c.Title.Contains("Git"));
+                foreach (var course in courses)
                 {
-                    Title = "Entity Framework 6",
-                    CreditsRating = 100
-                };
-                course.Department = db.Department.Find(2);
-                db.Course.Add(course);
+                    course.CreditsRating += 10;
+                }
                 db.SaveChanges();
             }
 
+        }
+
+        private static void AddCourse(ContosoUniversityEntities db)
+        {
+            var course = new Course
+            {
+                Title = "Entity Framework 6",
+                CreditsRating = 100
+            };
+            course.Department = db.Department.Find(2);
+            db.Course.Add(course);
+            db.SaveChanges();
         }
 
         private static void GetDepartments(ContosoUniversityEntities db)
