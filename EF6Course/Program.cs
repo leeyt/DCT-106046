@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace EF6Course
 {
@@ -24,26 +25,36 @@ namespace EF6Course
                 //DeleteCourse(db);
 
                 //ShowEntityStates(db);
+                //SaveChangesWithEntityStates(db);
 
-                var c = new Course
+                var courses = db.GetCourse("%Git%");
+                foreach (var course in courses)
                 {
-                    Title = "Entity Framework 6.1",
-                    Credits = 10,
-                    Department = db.Department.Find(1)
-                };
-                db.Course.Add(c);
-                db.SaveChanges();
-
-                var id = c.CourseID;
-                db.Entry(c).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-
-                db.Entry(c).State = System.Data.Entity.EntityState.Detached;
-
-                var d = new Course { CourseID = id };
-                db.Entry(d).State = System.Data.Entity.EntityState.Deleted;
-                db.SaveChanges();
+                    Console.WriteLine(course.Title);
+                }
             }
+        }
+
+        private static void SaveChangesWithEntityStates(ContosoUniversityEntities db)
+        {
+            var c = new Course
+            {
+                Title = "Entity Framework 6.1",
+                Credits = 10,
+                Department = db.Department.Find(1)
+            };
+            db.Course.Add(c);
+            db.SaveChanges();
+
+            var id = c.CourseID;
+            db.Entry(c).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            db.Entry(c).State = System.Data.Entity.EntityState.Detached;
+
+            var d = new Course { CourseID = id };
+            db.Entry(d).State = System.Data.Entity.EntityState.Deleted;
+            db.SaveChanges();
         }
 
         private static void ShowEntityStates(ContosoUniversityEntities db)
