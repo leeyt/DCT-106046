@@ -10,6 +10,10 @@ namespace EF6Course
     {
         static void Main(string[] args)
         {
+        }
+
+        private static void GetCourse_Git()
+        {
             using (var db = new ContosoUniversityEntities())
             {
                 //var data = db.Course.ToList();
