@@ -27,14 +27,24 @@ namespace EF6Course
                 //AddCourse(db);
 
                 // Update
-                var courses = db.Course.Where(c => c.Title.Contains("Git"));
-                foreach (var course in courses)
-                {
-                    course.CreditsRating += 10;
-                }
+                //UpdateCourse(db);
+
+                // Delete
+                var course = db.Course.Find(9);
+                db.Course.Remove(course);
                 db.SaveChanges();
             }
 
+        }
+
+        private static void UpdateCourse(ContosoUniversityEntities db)
+        {
+            var courses = db.Course.Where(c => c.Title.Contains("Git"));
+            foreach (var course in courses)
+            {
+                course.CreditsRating += 10;
+            }
+            db.SaveChanges();
         }
 
         private static void AddCourse(ContosoUniversityEntities db)
