@@ -12,7 +12,8 @@ namespace EF6Course
         {
             using (var db = new ContosoUniversityEntities())
             {
-                var data = db.Course.ToList();
+                //var data = db.Course.ToList();
+                var data = db.Course.Where(c => c.Title.Contains("Git")).ToList();
 
                 foreach (var course in data)
                 {
