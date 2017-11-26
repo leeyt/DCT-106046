@@ -22,6 +22,15 @@ namespace EF6Course
                 //AddCourse(db);
                 //UpdateCourse(db);
                 //DeleteCourse(db);
+
+                var one = db.Course.Find(11);
+                Console.WriteLine(db.Entry(one).State);
+                one.Credits += 10;
+                Console.WriteLine(db.Entry(one).State);
+                db.Course.Remove(one);
+                Console.WriteLine(db.Entry(one).State);
+                db.SaveChanges();
+                Console.WriteLine(db.Entry(one).State);
             }
         }
 
@@ -58,6 +67,8 @@ namespace EF6Course
             foreach (var course in courses)
             {
                 course.Credits += 10;
+                course.CreatedOn = DateTime.Now;
+                course.UpdatedOn = DateTime.Now;
             }
             db.SaveChanges();
         }
