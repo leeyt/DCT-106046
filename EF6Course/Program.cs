@@ -10,6 +10,21 @@ namespace EF6Course
     {
         static void Main(string[] args)
         {
+            using (var db = new ContosoUniversityEntities())
+            {
+                db.Database.Log = Console.WriteLine;
+
+                var departments = from p in db.Department.Include("Course") select p;
+
+                foreach (var department in departments)
+                {
+                    Console.WriteLine(department.Name);
+                    foreach (var course in department.Course)
+                    {
+                        Console.WriteLine("\t" + course.Title);
+                    }
+                }
+            }
         }
 
         private static void GetCourse_Git()
