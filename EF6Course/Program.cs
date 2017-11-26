@@ -10,8 +10,26 @@ namespace EF6Course
     {
         static void Main(string[] args)
         {
-            //GetCourse_Git();
-            GetDepartmentsWithCourses();
+
+            using (var db = new ContosoUniversityEntities())
+            {
+                db.Database.Log = Console.WriteLine;
+
+                //GetCourse_Git(db);
+                //GetDepartments(db);
+                //GetDepartmentsWithCourses();
+
+                //AddCourse(db);
+                //UpdateCourse(db);
+                //DeleteCourse(db);
+            }
+        }
+
+        private static void DeleteCourse(ContosoUniversityEntities db)
+        {
+            var course = db.Course.Find(9);
+            db.Course.Remove(course);
+            db.SaveChanges();
         }
 
         private static void GetDepartmentsWithCourses()
@@ -20,19 +38,16 @@ namespace EF6Course
             {
                 db.Database.Log = Console.WriteLine;
 
-                //GetCourse_Git();
-                //GetDepartments(db);
-
-                // Add
-                //AddCourse(db);
-
-                // Update
-                //UpdateCourse(db);
-
-                // Delete
-                var course = db.Course.Find(9);
-                db.Course.Remove(course);
-                db.SaveChanges();
+                //var departments = db.Department;
+                var departments = db.Department.Include("Course");
+                foreach (var department in departments)
+                {
+                    Console.WriteLine(department.Name);
+                    foreach (var course in department.Course)
+                    {
+                        Console.WriteLine("\t" + course.Title);
+                    }
+                }
             }
 
         }
@@ -42,7 +57,7 @@ namespace EF6Course
             var courses = db.Course.Where(c => c.Title.Contains("Git"));
             foreach (var course in courses)
             {
-                course.CreditsRating += 10;
+                course.Credits += 10;
             }
             db.SaveChanges();
         }
@@ -52,7 +67,7 @@ namespace EF6Course
             var course = new Course
             {
                 Title = "Entity Framework 6",
-                CreditsRating = 100
+                Credits = 100
             };
             course.Department = db.Department.Find(2);
             db.Course.Add(course);
@@ -74,20 +89,17 @@ namespace EF6Course
             }
         }
 
-        private static void GetCourse_Git()
+        private static void GetCourse_Git(ContosoUniversityEntities db)
         {
-            using (var db = new ContosoUniversityEntities())
-            {
-                //var data = db.Course.ToList();
-                //var data = db.Course.Where(c => c.Title.Contains("Git")).ToList();
-                var data = (from p in db.Course
-                            where p.Title.Contains("Git")
-                            select p).ToList();
+            //var data = db.Course.ToList();
+            //var data = db.Course.Where(c => c.Title.Contains("Git")).ToList();
+            var data = (from p in db.Course
+                        where p.Title.Contains("Git")
+                        select p).ToList();
 
-                foreach (var course in data)
-                {
-                    Console.WriteLine(course.Title);
-                }
+            foreach (var course in data)
+            {
+                Console.WriteLine(course.Title);
             }
         }
     }
