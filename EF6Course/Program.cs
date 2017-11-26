@@ -23,15 +23,39 @@ namespace EF6Course
                 //UpdateCourse(db);
                 //DeleteCourse(db);
 
-                var one = db.Course.Find(11);
-                Console.WriteLine(db.Entry(one).State);
-                one.Credits += 10;
-                Console.WriteLine(db.Entry(one).State);
-                db.Course.Remove(one);
-                Console.WriteLine(db.Entry(one).State);
+                //ShowEntityStates(db);
+
+                var c = new Course
+                {
+                    Title = "Entity Framework 6.1",
+                    Credits = 10,
+                    Department = db.Department.Find(1)
+                };
+                db.Course.Add(c);
                 db.SaveChanges();
-                Console.WriteLine(db.Entry(one).State);
+
+                var id = c.CourseID;
+                db.Entry(c).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                db.Entry(c).State = System.Data.Entity.EntityState.Detached;
+
+                var d = new Course { CourseID = id };
+                db.Entry(d).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
             }
+        }
+
+        private static void ShowEntityStates(ContosoUniversityEntities db)
+        {
+            var one = db.Course.Find(11);
+            Console.WriteLine(db.Entry(one).State);
+            one.Credits += 10;
+            Console.WriteLine(db.Entry(one).State);
+            db.Course.Remove(one);
+            Console.WriteLine(db.Entry(one).State);
+            db.SaveChanges();
+            Console.WriteLine(db.Entry(one).State);
         }
 
         private static void DeleteCourse(ContosoUniversityEntities db)
