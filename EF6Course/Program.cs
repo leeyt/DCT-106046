@@ -10,6 +10,15 @@ namespace EF6Course
     {
         static void Main(string[] args)
         {
+            using (var db = new ContosoUniversityEntities())
+            {
+                var data = db.Course.ToList();
+
+                foreach (var course in data)
+                {
+                    Console.WriteLine(course.Title);
+                }
+            }
         }
     }
 }
