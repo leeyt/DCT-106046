@@ -10,19 +10,43 @@ namespace EF6Course
     {
         static void Main(string[] args)
         {
+            //GetCourse_Git();
+            GetDepartmentsWithCourses();
+        }
+
+        private static void GetDepartmentsWithCourses()
+        {
             using (var db = new ContosoUniversityEntities())
             {
                 db.Database.Log = Console.WriteLine;
 
-                var departments = from p in db.Department.Include("Course") select p;
+                //GetCourse_Git();
+                //GetDepartments(db);
 
-                foreach (var department in departments)
+                // Add
+                var course = new Course
                 {
-                    Console.WriteLine(department.Name);
-                    foreach (var course in department.Course)
-                    {
-                        Console.WriteLine("\t" + course.Title);
-                    }
+                    Title = "Entity Framework 6",
+                    CreditsRating = 100
+                };
+                course.Department = db.Department.Find(2);
+                db.Course.Add(course);
+                db.SaveChanges();
+            }
+
+        }
+
+        private static void GetDepartments(ContosoUniversityEntities db)
+        {
+            // var departments = db.Department;
+            var departments = db.Department.Include("Course");
+
+            foreach (var department in departments)
+            {
+                Console.WriteLine(department.Name);
+                foreach (var course in department.Course)
+                {
+                    Console.WriteLine("\t" + course.Title);
                 }
             }
         }
